@@ -99,7 +99,7 @@ h3 {
   max-height: 1100px;
   border: 1px solid #ffffff1c;
   border-radius: 13px;
-  overflow: clip;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 0 var(--page-gutter);
@@ -108,18 +108,28 @@ h3 {
 .hero-image {
   position: absolute;
   inset: -5% -3%;
-  z-index: -3;
+  z-index: 0;
+  pointer-events: none;
 }
 .sky-image {
   object-fit: cover;
   object-position: center 58%;
-  animation: cloud-drift 38s ease-in-out infinite alternate;
+  animation: cloud-light 38s ease-in-out infinite alternate;
 }
 .hero-shade {
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: 1;
+  pointer-events: none;
   background: linear-gradient(180deg, #14242c66 0%, #10212a10 30%, #111c2012 52%, #152124a3 100%);
+}
+.hero > .navbar,
+.hero > .hero-intro,
+.hero > .hero-type,
+.hero > .hero-bottom,
+.hero > .hero-baseline {
+  position: relative;
+  z-index: 2;
 }
 .navbar {
   display: flex;
@@ -358,12 +368,13 @@ h3 {
   font-size: 13px;
   margin-top: 36px;
 }
-@keyframes cloud-drift {
+/* Ambient light stays separate from the sole GSAP image transform. */
+@keyframes cloud-light {
   from {
-    transform: scale(1.01) translateX(-0.4%);
+    opacity: 0.985;
   }
   to {
-    transform: scale(1.08) translateX(0.4%);
+    opacity: 1;
   }
 }
 @media (min-width: 1700px) {
@@ -551,11 +562,7 @@ em {
 }
 .project-photo {
   object-fit: cover;
-  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: -2;
-}
-.project-art:hover .project-photo {
-  transform: scale(1.035);
 }
 .project-art-shade {
   position: absolute;
@@ -742,6 +749,18 @@ summary::-webkit-details-marker {
   border-top: 1px solid var(--color-line);
   padding-top: 25px;
 }
+.founder-portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #626d63;
+  margin-bottom: 25px;
+}
+.founder-photo {
+  object-fit: cover;
+  object-position: center 32%;
+}
 .founder > .eyebrow {
   color: var(--color-muted);
 }
@@ -852,12 +871,9 @@ summary::-webkit-details-marker {
   gap: 35px;
   list-style: none;
   padding: 31px 3px;
-  transition:
-    padding 0.35s,
-    color 0.35s;
+  transition: color 0.35s;
 }
 .service summary:hover {
-  padding-left: 14px;
   color: #dcc495;
 }
 .service-index {
@@ -1299,5 +1315,224 @@ summary::-webkit-details-marker {
   .form-pair {
     grid-template-columns: 1fr;
     gap: 19px;
+  }
+}
+
+/* Motion layers preserve the original layout and type metrics. */
+html.lenis {
+  scroll-behavior: auto;
+}
+html.motion-dialog-open {
+  overflow: hidden;
+}
+.hero-background-reveal {
+  position: absolute;
+  inset: 0;
+}
+.hero[data-hero-entering] .hero-line,
+.hero[data-hero-entering] .hero-serif {
+  overflow: clip;
+  overflow-clip-margin: 0.14em;
+}
+.hero-line-content,
+.hero-serif-content {
+  display: block;
+}
+.mobile-menu,
+.inquiry-dialog {
+  overscroll-behavior: contain;
+}
+@media (hover: none), (pointer: coarse) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Keep image choreography separate from UI hover transforms. */
+.project-presentation {
+  position: relative;
+}
+.project-scroll-image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.text-reveal {
+  display: inline-block;
+}
+
+.image-reveal,
+.image-hover-layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* VitaNova wordmark sizing preserves the existing navigation and footer layout. */
+.brand-logo {
+  display: block;
+  width: 220px;
+  height: auto;
+}
+@media (max-width: 760px) {
+  .brand-logo {
+    width: 180px;
+  }
+}
+
+/* Project inquiry: a calm, scrollable extension of the editorial interface. */
+button.nav-cta {
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+.inquiry-dialog {
+  width: min(820px, calc(100% - 40px));
+  max-height: calc(100dvh - 40px);
+  padding: 32px clamp(24px, 5vw, 64px) 48px;
+  border-radius: 5px;
+  background: var(--color-canvas);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.inquiry-dialog::backdrop {
+  background: #0d1211d9;
+  backdrop-filter: none;
+}
+.inquiry-dialog .mobile-menu-top {
+  gap: 20px;
+  margin-bottom: 44px;
+}
+.inquiry-dialog h3 {
+  font-size: clamp(42px, 6vw, 64px);
+  line-height: 1.04;
+}
+.inquiry-intro {
+  font-size: 14px;
+  max-width: 520px;
+  margin: 24px 0 40px;
+}
+.inquiry-fields {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 26px;
+  min-width: 0;
+}
+.inquiry-dialog label,
+.inquiry-types legend {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.inquiry-dialog input,
+.inquiry-dialog select,
+.inquiry-dialog textarea {
+  background: #ffffff04;
+  font-size: 16px;
+  padding: 14px;
+  min-width: 0;
+}
+.inquiry-dialog input::placeholder,
+.inquiry-dialog textarea::placeholder {
+  color: var(--color-muted);
+}
+.inquiry-optional {
+  font-size: 11px;
+  color: var(--color-muted);
+}
+.inquiry-types {
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  border: 0;
+}
+.inquiry-types legend {
+  margin-bottom: 12px;
+}
+.inquiry-types legend .inquiry-optional {
+  margin-left: 10px;
+}
+.inquiry-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.inquiry-options label {
+  position: relative;
+  cursor: pointer;
+}
+.inquiry-options input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  padding: 0;
+}
+.inquiry-options label > span {
+  display: block;
+  padding: 11px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  font-size: 12px;
+}
+.inquiry-options input:checked + span {
+  background: var(--color-cream);
+  color: var(--color-canvas);
+  border-color: var(--color-cream);
+}
+.inquiry-options input:focus-visible + span {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 3px;
+}
+.inquiry-dialog [aria-invalid='true'] {
+  border-color: #cdb5a5;
+}
+.inquiry-field-error {
+  color: #e4c9b7;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.inquiry-types > .inquiry-field-error {
+  display: block;
+  margin-top: 10px;
+}
+.inquiry-note {
+  font-size: 11px;
+  color: var(--color-muted);
+  margin: 12px 0 0;
+}
+.inquiry-dialog .submit-brief {
+  cursor: pointer;
+  min-height: 52px;
+}
+.inquiry-dialog .submit-brief:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.inquiry-success {
+  padding: 40px 0 20px;
+  display: grid;
+  gap: 24px;
+}
+.inquiry-success p {
+  max-width: 460px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+@media (max-width: 760px) {
+  .inquiry-dialog {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+    padding: 24px 22px 32px;
+  }
+  .inquiry-dialog .mobile-menu-top > .eyebrow {
+    max-width: 185px;
+    font-size: 9px;
+  }
+  .inquiry-dialog .text-button {
+    min-height: 44px;
   }
 }

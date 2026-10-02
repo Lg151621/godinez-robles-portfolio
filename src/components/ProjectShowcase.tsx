@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { projects } from '@/data/projects';
 import { Arrow } from './Arrow';
 import { Reveal } from './Reveal';
+import { RevealImage } from './motion/RevealImage';
+import { ProjectSequence } from './motion/ProjectSequence';
 export function ProjectShowcase() {
   return (
     <section id="work" className="content-section work-section" aria-labelledby="work-title">
@@ -23,53 +25,61 @@ export function ProjectShowcase() {
           </p>
         </div>
       </Reveal>
-      <div className="project-list">
+      <ProjectSequence>
         {projects.map((project, index) => (
-          <Reveal key={project.id} className={`project project-${project.id}`}>
-            <div className="project-art" aria-label={`${project.name} concept website preview`}>
-              <Image
-                src={project.image}
-                alt={project.imageAlt}
-                fill
-                sizes={
-                  index === 0 ? '(max-width: 760px) 100vw, 90vw' : '(max-width: 760px) 100vw, 65vw'
-                }
-                className="project-photo"
-              />
-              <div className="project-art-shade" />
-              <div className="preview-nav" aria-hidden="true">
-                <span className="preview-brand">{project.name.toLowerCase()}</span>
-                <span>
-                  {index === 0
-                    ? 'Spaces / Our approach / Inquire'
-                    : 'Stories / Places / Perspective'}
-                </span>
+          <article key={project.id} className={`project project-${project.id}`}>
+            <div className="project-presentation">
+              <div className="project-art" aria-label={`${project.name} concept website preview`}>
+                <div className="project-scroll-image">
+                  <RevealImage>
+                    <Image
+                      src={project.image}
+                      alt={project.imageAlt}
+                      fill
+                      sizes={
+                        index === 0
+                          ? '(max-width: 760px) 100vw, 90vw'
+                          : '(max-width: 760px) 100vw, 65vw'
+                      }
+                      className="project-photo"
+                    />
+                  </RevealImage>
+                </div>
+                <div className="project-art-shade" />
+                <div className="preview-nav" aria-hidden="true">
+                  <span className="preview-brand">{project.name.toLowerCase()}</span>
+                  <span>
+                    {index === 0
+                      ? 'Spaces / Our approach / Inquire'
+                      : 'Stories / Places / Perspective'}
+                  </span>
+                </div>
+                <div className="preview-heading" aria-hidden="true">
+                  <span className="eyebrow">{project.previewSubtitle}</span>
+                  <span className="preview-title">{project.previewTitle}</span>
+                </div>
+                <div className="preview-bottom" aria-hidden="true">
+                  <span>
+                    {index === 0
+                      ? 'A different way of being at home.'
+                      : 'Small stories. Wide horizons.'}
+                  </span>
+                  <span>
+                    EXPLORE <Arrow />
+                  </span>
+                </div>
+                <span className="concept-stamp">DESIGN CONCEPT</span>
               </div>
-              <div className="preview-heading" aria-hidden="true">
-                <span className="eyebrow">{project.previewSubtitle}</span>
-                <span className="preview-title">{project.previewTitle}</span>
-              </div>
-              <div className="preview-bottom" aria-hidden="true">
-                <span>
-                  {index === 0
-                    ? 'A different way of being at home.'
-                    : 'Small stories. Wide horizons.'}
-                </span>
-                <span>
-                  EXPLORE <Arrow />
-                </span>
-              </div>
-              <span className="concept-stamp">DESIGN CONCEPT</span>
-            </div>
-            <div className="project-info">
-              <span className="project-number">0{index + 1}</span>
-              <div className="project-title">
-                <h3>{project.name}</h3>
-                <p>{project.category}</p>
-              </div>
-              <div className="project-meta">
-                <span>{project.client}</span>
-                <span>{project.year}</span>
+              <div className="project-info">
+                <span className="project-number">0{index + 1}</span>
+                <div className="project-title">
+                  <h3>{project.name}</h3>
+                  <p>{project.category}</p>
+                </div>
+                <div className="project-meta">
+                  <span>{project.client}</span>
+                  <span>{project.year}</span>
+                </div>
               </div>
             </div>
             <details className="project-details">
@@ -96,9 +106,9 @@ export function ProjectShowcase() {
                 ) : null}
               </div>
             </details>
-          </Reveal>
+          </article>
         ))}
-      </div>
+      </ProjectSequence>
     </section>
   );
 }

@@ -1,4 +1,5 @@
-import { Reveal } from './Reveal';
+import { RevealText } from './motion/RevealText';
+import { timing } from '@/lib/motion';
 const principles = [
   {
     word: 'PURPOSE',
@@ -29,16 +30,20 @@ export function Principles() {
         <span className="eyebrow">A FEW THINGS WE WON&apos;T COMPROMISE</span>
       </div>
       {principles.map((principle, index) => (
-        <Reveal key={principle.word} className="principle">
+        <div key={principle.word} className="principle">
           <div className="principle-heading">
             <span className="principle-index eyebrow">0{index + 1}</span>
             <h2>
-              <span>{principle.word}</span>
-              <em>{principle.qualifier}</em>
+              <span>
+                <RevealText>{principle.word}</RevealText>
+              </span>
+              <em>
+                <RevealText delay={timing.stagger}>{principle.qualifier}</RevealText>
+              </em>
             </h2>
           </div>
           <p>{principle.description}</p>
-        </Reveal>
+        </div>
       ))}
       <div className="principles-footnote">
         <span aria-hidden="true">✳</span>

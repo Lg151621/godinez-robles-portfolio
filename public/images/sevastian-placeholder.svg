@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <defs>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#626d63"/>
+      <stop offset=".55" stop-color="#85897a"/>
+      <stop offset="1" stop-color="#39443d"/>
+    </linearGradient>
+    <radialGradient id="light">
+      <stop stop-color="#d5cfb5" stop-opacity=".6"/>
+      <stop offset="1" stop-color="#d5cfb5" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset=".45" stop-color="#1b2823" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1b2823" stop-opacity=".65"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#field)"/>
+  <ellipse cx="310" cy="300" rx="850" ry="1000" fill="url(#light)"/>
+  <rect width="1200" height="1500" fill="url(#shade)"/>
+  <text x="78" y="1390" fill="#f1eee5" font-family="Arial, sans-serif" font-size="22" letter-spacing="4">PORTRAIT FORTHCOMING</text>
+</svg>

@@ -2,11 +2,11 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { useAnimate, useInView } from 'framer-motion';
 import { ease, timing } from '@/lib/motion';
-import { useMotionSettings } from './motion/MotionProvider';
+import { useMotionSettings } from './MotionProvider';
 
-export function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
-  const [scope, animate] = useAnimate<HTMLDivElement>();
-  const inView = useInView(scope, { once: true, amount: 0.12 });
+export function RevealText({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+  const [scope, animate] = useAnimate<HTMLSpanElement>();
+  const inView = useInView(scope, { once: true, amount: 0.5 });
   const { ready, reduced } = useMotionSettings();
   const played = useRef(false);
   useEffect(() => {
@@ -14,17 +14,19 @@ export function Reveal({ children, className = '' }: { children: ReactNode; clas
     played.current = true;
     const animation = animate(
       scope.current,
-      { y: [14, 0], opacity: [0.85, 1] },
+      { y: [10, 0], opacity: [0.72, 1] },
       {
         duration: timing.reveal,
+        delay,
         ease,
       },
     );
     return () => animation.complete();
-  }, [ready, reduced, inView, animate, scope]);
+  }, [ready, reduced, inView, delay, animate, scope]);
+  // Visible in server-rendered HTML and when JavaScript/motion is unavailable.
   return (
-    <div className={className} ref={scope}>
+    <span className="text-reveal" ref={scope}>
       {children}
-    </div>
+    </span>
   );
 }

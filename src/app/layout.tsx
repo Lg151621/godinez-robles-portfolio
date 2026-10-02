@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { site } from '@/data/site';
+import 'lenis/dist/lenis.css';
 import './globals.css';
+import { ProjectInquiryProvider } from '@/components/ProjectInquiry';
+import { MotionProvider } from '@/components/motion/MotionProvider';
 
 const sans = localFont({
   src: '../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2',
@@ -19,7 +22,7 @@ const serif = localFont({
   display: 'swap',
 });
 export const metadata: Metadata = {
-  title: 'Godinez & Robles — Built with purpose.',
+  title: `${site.name} — Built with purpose.`,
   description: site.description,
   robots: { index: false, follow: false },
 };
@@ -30,7 +33,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        {children}
+        <MotionProvider>
+          <ProjectInquiryProvider>{children}</ProjectInquiryProvider>
+        </MotionProvider>
       </body>
     </html>
   );

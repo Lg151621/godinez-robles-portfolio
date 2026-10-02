@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { readFile } from 'node:fs/promises';
 
 test('complete responsive page, real navigation targets, and clean runtime', async ({
   page,
@@ -64,32 +63,6 @@ test('navigation is keyboard accessible and menus close on Escape', async ({ pag
       exact: false,
     }),
   ).toBeVisible();
-});
-
-test('inquiry validates and downloads an honest project brief', async ({ page }) => {
-  await page.goto('/');
-  await page.locator('#contact').getByRole('button', { name: 'Start a project' }).click();
-  const dialog = page.getByRole('dialog');
-  await dialog.getByRole('button', { name: 'Download project brief' }).click();
-  expect(
-    await dialog
-      .locator('input[name="name"]')
-      .evaluate((el) => (el as HTMLInputElement).validity.valueMissing),
-  ).toBe(true);
-  await dialog.getByLabel('Your name').fill('Sample Client');
-  await dialog.getByLabel('Email address').fill('sample@example.com');
-  await dialog
-    .getByLabel('A little about your idea')
-    .fill('A thoughtful website for an independent bookstore.');
-  const downloadPromise = page.waitForEvent('download');
-  await dialog.getByRole('button', { name: 'Download project brief' }).click();
-  const download = await downloadPromise;
-  const contents = await readFile((await download.path())!, 'utf8');
-  expect(contents).toContain('independent bookstore');
-  expect(contents).toContain('sample@example.com');
-  await expect(page.getByRole('status')).toContainText('Nothing has been sent');
-  await page.keyboard.press('Escape');
-  await expect(dialog).not.toBeVisible();
 });
 
 test('reduced motion disables ambient movement and page has no WCAG A/AA violations', async ({

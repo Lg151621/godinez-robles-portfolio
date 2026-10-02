@@ -1,11 +1,13 @@
 import { defineConfig } from '@playwright/test';
+const baseURL = process.env.PORTFOLIO_TEST_URL || 'http://127.0.0.1:3000';
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   workers: 3,
-  use: { baseURL: 'http://127.0.0.1:3000', trace: 'retain-on-failure' },
+  use: { baseURL, trace: 'retain-on-failure' },
   projects: [
     { name: 'desktop', use: { viewport: { width: 1440, height: 1000 } } },
+    { name: 'laptop', use: { viewport: { width: 1280, height: 800 } } },
     { name: 'tablet', use: { viewport: { width: 768, height: 1024 } } },
     {
       name: 'mobile',
@@ -13,8 +15,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://127.0.0.1:3000',
+    command: `npm run dev -- --port ${new URL(baseURL).port}`,
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
 });

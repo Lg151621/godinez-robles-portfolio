@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import { RevealImage } from './motion/RevealImage';
 import { site } from '@/data/site';
 import { Reveal } from './Reveal';
 export function About() {
@@ -27,6 +29,19 @@ export function About() {
       <div className="founders">
         {site.founders.map((founder, i) => (
           <Reveal key={founder.name} className="founder">
+            <div className="founder-portrait">
+              <RevealImage>
+                <Image
+                  src={founder.portrait}
+                  unoptimized
+                  alt={`Profile image for ${founder.name}`}
+                  fill
+                  sizes="(max-width: 760px) 90vw, 42vw"
+                  quality={85}
+                  className="founder-photo"
+                />
+              </RevealImage>
+            </div>
             <span className="eyebrow">0{i + 1} / CO-FOUNDER</span>
             <h3>
               {founder.name.split(' ')[0]}
